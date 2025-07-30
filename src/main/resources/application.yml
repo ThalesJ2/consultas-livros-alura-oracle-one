@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: consulta-livros-one
+
+  main:
+    banner-mode: off
