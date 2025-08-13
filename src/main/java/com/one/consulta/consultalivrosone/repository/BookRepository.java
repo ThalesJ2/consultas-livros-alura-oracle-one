@@ -9,4 +9,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     Boolean existsByTitle(String title);
     Book findByTitle(String title);
+
+    Integer countByLanguage(String language);
 }

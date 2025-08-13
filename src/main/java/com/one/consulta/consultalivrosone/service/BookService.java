@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.one.consulta.consultalivrosone.DTO.BookCountByLanguageResponseDTO;
 import com.one.consulta.consultalivrosone.DTO.BookRequestDTO;
 import com.one.consulta.consultalivrosone.DTO.BookResponseDTO;
 import com.one.consulta.consultalivrosone.model.Author;
@@ -34,6 +35,7 @@ public class BookService {
     private AuthorRepository authorRepository;
 
     public List<BookResponseDTO> findBook(String title){
+        System.out.println("FindByTitle      "+address);
         List<Book> books = new ArrayList<>();
         List<BookResponseDTO> responseDTO = new ArrayList<>();
         if(!repository.existsByTitle(title)){
@@ -70,6 +72,7 @@ public class BookService {
     }
 
     public List<BookResponseDTO> findAll(){
+        System.out.println("FindAll      "+address);
         String result = apiService.callAPI(address);
         JsonObject object = gson.fromJson(result, JsonObject.class);
         Type listType = new TypeToken<ArrayList<BookRequestDTO>>(){}.getType();
@@ -92,5 +95,9 @@ public class BookService {
 
     public String removeSpace(String  content){
         return content.replace(" ","%20");
+    }
+
+    public BookCountByLanguageResponseDTO countByLanguage(String language){
+        return  new BookCountByLanguageResponseDTO(repository.countByLanguage(language),language);
     }
 }

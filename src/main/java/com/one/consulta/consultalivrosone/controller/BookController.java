@@ -1,5 +1,6 @@
 package com.one.consulta.consultalivrosone.controller;
 
+import com.one.consulta.consultalivrosone.DTO.BookCountByLanguageResponseDTO;
 import com.one.consulta.consultalivrosone.DTO.BookResponseDTO;
 import com.one.consulta.consultalivrosone.model.Book;
 import com.one.consulta.consultalivrosone.service.BookService;
@@ -21,7 +22,11 @@ public class BookController {
         if(title == null){
             return  ResponseEntity.ok(service.findAll());
         }
-
         return ResponseEntity.ok(service.findBook(title));
+    }
+
+    @GetMapping("/{language}")
+    public ResponseEntity<BookCountByLanguageResponseDTO> countByLanguage(@PathVariable String language) {
+        return ResponseEntity.ok(service.countByLanguage(language));
     }
 }
