@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgres://localhost:5432/db_books
+    url: jdbc:postgresql://localhost:5432/books
     username: ${USER_POSTGRES}
     password: ${PASSWORD_POSTGRES}
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create

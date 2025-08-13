@@ -1,16 +1,26 @@
 package com.one.consulta.consultalivrosone.model;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.one.consulta.consultalivrosone.DTO.BookRequestDTO;
+import jakarta.persistence.*;
 
+@Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Book {
 
+    @Id
     private Integer id;
     private String title;
-    private List<Author> authors;
-    private List<String> summaries;
-    private List<Translator> translators;
-    private List<String> subjects;
-    private List<String> bookshelves;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id",nullable = false)
+    private Author author;
+    private String language;
     private Boolean copyright;
     private String media_type;
     private Integer download_count;
@@ -19,17 +29,31 @@ public class Book {
     public Book() {
     }
 
-    public Book(Integer id, String title, List<Author> authors, List<String> summaries, List<Translator> translators, List<String> subjects, List<String> bookshelves, Boolean copyright, String media_type, Integer download_count) {
+    public Book(Integer id, String title, Author author, Boolean copyright, String media_type, Integer download_count) {
         this.id = id;
         this.title = title;
-        this.authors = authors;
-        this.summaries = summaries;
-        this.translators = translators;
-        this.subjects = subjects;
-        this.bookshelves = bookshelves;
+        this.author = author;
         this.copyright = copyright;
         this.media_type = media_type;
         this.download_count = download_count;
+    }
+
+    public Book(BookRequestDTO dto){
+        this.id = dto.id();
+        this.title = dto.title();
+        this.copyright = dto.copyright();
+        this.media_type = dto.media_type();
+        this.download_count = dto.download_count();
+        this.author = dto.authors().getFirst();
+    }
+    public Book(BookRequestDTO dto, Author author, String language){
+        this.id = dto.id();
+        this.language = language;
+        this.title = dto.title();
+        this.copyright = dto.copyright();
+        this.media_type = dto.media_type();
+        this.download_count = dto.download_count();
+        this.author = author;
     }
 
     public Integer getId() {
@@ -48,36 +72,12 @@ public class Book {
         this.title = title;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
-    }
-
-    public List<String> getSummaries() {
-        return summaries;
-    }
-
-    public void setSummaries(List<String> summaries) {
-        this.summaries = summaries;
-    }
-
-    public List<String> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<String> subjects) {
-        this.subjects = subjects;
-    }
-
-    public List<String> getBookshelves() {
-        return bookshelves;
-    }
-
-    public void setBookshelves(List<String> bookshelves) {
-        this.bookshelves = bookshelves;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public Boolean getCopyright() {
@@ -104,12 +104,12 @@ public class Book {
         this.download_count = download_count;
     }
 
-    public List<Translator> getTranslators() {
-        return translators;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setTranslators(List<Translator> translators) {
-        this.translators = translators;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override
@@ -117,11 +117,7 @@ public class Book {
         return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", authors=" + authors +
-                ", summaries=" + summaries +
-                ", translators=" + translators +
-                ", subjects=" + subjects +
-                ", bookshelves=" + bookshelves +
+                ", author=" + author +
                 ", copyright=" + copyright +
                 ", media_type='" + media_type + '\'' +
                 ", download_count=" + download_count +

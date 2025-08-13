@@ -1,6 +1,6 @@
 package com.one.consulta.consultalivrosone.controller;
 
-import com.one.consulta.consultalivrosone.DTO.BookRequestDTO;
+import com.one.consulta.consultalivrosone.DTO.BookResponseDTO;
 import com.one.consulta.consultalivrosone.model.Book;
 import com.one.consulta.consultalivrosone.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,12 @@ public class BookController {
     @Autowired
     private BookService service;
     @GetMapping
-    public ResponseEntity<List<Book>> findBook(@ModelAttribute BookRequestDTO dto) {
+    public ResponseEntity<List<BookResponseDTO>> findBook(@RequestParam(required = false) String title) {
 
-        if(dto.id() == null && dto.title() == null && dto.author() == null && dto.language() == null)
+        if(title == null){
             return  ResponseEntity.ok(service.findAll());
+        }
 
-        return ResponseEntity.ok(service.findBook(dto.title()));
+        return ResponseEntity.ok(service.findBook(title));
     }
 }
